@@ -15,7 +15,7 @@
     >
       <ul class="navbar-nav">
         <li class="nav-item" @click="push('Thành viên')">
-          <router-link to="/member" active-class="active" class="nav-link">
+          <router-link to="/member" active-class="active" class="nav-link" id="routerLinkRoot">
             <div
               class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center"
             >
@@ -189,6 +189,7 @@
 </template>
 
 <script>
+import $ from "jquery";
 export default {
   methods: {
     push(value) {
@@ -196,6 +197,12 @@ export default {
       console.log(this.$store.state.pageTitle)
     },
   },
+  mounted() {
+    var pathname = window.location.pathname;
+    if (pathname == "/") {
+      $('#routerLinkRoot').addClass('active')
+    }
+  }, 
 };
 </script>
 

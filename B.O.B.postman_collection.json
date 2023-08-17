@@ -1,0 +1,96 @@
+{
+	"info": {
+		"_postman_id": "f8664e2c-1021-4f8a-b658-46b6483b509b",
+		"name": "B.O.B",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2544253"
+	},
+	"item": [
+		{
+			"name": "Create Link Payment",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-client-id",
+						"value": "85ff5089-a871-45be-a870-fef016fcf4f7",
+						"type": "text"
+					},
+					{
+						"key": "x-api-key",
+						"value": "83ed70ff-9e1a-422e-a59c-de962c88849f",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"orderCode\": 124,\r\n  \"amount\": 1000,\r\n  \"description\": \"VQRIO124\",\r\n  \"buyerName\": \"Le van thanh nhan\",\r\n  \"buyerEmail\": \"buyer-email@gmail.com\",\r\n  \"buyerPhone\": \"090xxxxxxx\",\r\n  \"buyerAddress\": \"số nhà, đường, phường, tỉnh hoặc thành phố\",\r\n  \"items\": [\r\n    {\r\n      \"name\": \"Iphone\",\r\n      \"quantity\": 1,\r\n      \"price\": 1000\r\n    }\r\n  ],\r\n  \"cancelUrl\": \"https://your-cancel-url.com\",\r\n  \"returnUrl\": \"https://your-success-url.com\",\r\n  \"signature\": \"344f5a1ddc1b6ff0a87c9225087f46490361965da663f08039b91d65eaac1b7d\"\r\n}"
+				},
+				"url": {
+					"raw": "https://api-merchant.payos.vn/v2/payment-requests",
+					"protocol": "https",
+					"host": [
+						"api-merchant",
+						"payos",
+						"vn"
+					],
+					"path": [
+						"v2",
+						"payment-requests"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check Status",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-client-id",
+						"value": "85ff5089-a871-45be-a870-fef016fcf4f7",
+						"type": "text"
+					},
+					{
+						"key": "x-api-key",
+						"value": "83ed70ff-9e1a-422e-a59c-de962c88849f",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://api-merchant.payos.vn/v2/payment-requests/84352adeead043c18622e306a0739c07",
+					"protocol": "https",
+					"host": [
+						"api-merchant",
+						"payos",
+						"vn"
+					],
+					"path": [
+						"v2",
+						"payment-requests",
+						"84352adeead043c18622e306a0739c07"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

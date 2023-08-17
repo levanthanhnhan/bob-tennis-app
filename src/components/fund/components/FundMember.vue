@@ -1,5 +1,6 @@
 <template>
   <p class="">Quỹ năm {{ new Date().getFullYear() }}</p>
+    <button class="btn btn-primary mb-4 draggable" draggable="true" @click="pay()">Pay</button>
   <div class="row removable">
     <table id="table" class="tg">
       <tbody id="tbody"></tbody>
@@ -8,9 +9,14 @@
 </template>
 
 <script>
-import $ from "jquery";
+import $ from 'jquery'
+import service from '../../../services/fund.service'
+
 export default {
   methods: {
+    pay() {
+      service.payWithMoMo()
+    },
     drawCellBackground() {
       var NUMBER_ROW = 18;
       var NUMBER_CELL = 12;
