@@ -1,5 +1,5 @@
 <template>
-  <p class="">Danh sách hội viên sinh nhật trong tháng</p>
+  <p class="">Sinh nhật trong tháng</p>
   <div class="row removable">
     <!-- v-for -->
     <div class="col-xl-3 col-md-6 mb-4" v-for="member in members">
