@@ -9,9 +9,3 @@ import MemberList from '../member/components/MemberList.vue'
     <BirthdayList></BirthdayList>
     <MemberList></MemberList>
 </template>
-
-<script>
-export default {
-    name: "Member",
-}
-</script>

@@ -1,0 +1,3 @@
+<template>
+    Pay success
+</template>

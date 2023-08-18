@@ -3,6 +3,8 @@ import Main from '../components/main/Main.vue'
 import Member from '../components/member/Member.vue'
 import Fund from '../components/fund/Fund.vue'
 import Login from '../components/login/Login.vue'
+import PaySuccess from '../components/payOS/PaySuccess.vue'
+import PayError from '../components/payOS/PayError.vue'
 
 const routes = [
     {
@@ -24,6 +26,16 @@ const routes = [
                 path: '/fund',
                 name: 'fund',
                 component: Fund
+            },
+            {
+                path: '/pay-success',
+                name: 'pay-success',
+                component: PaySuccess
+            },
+            {
+                path: '/pay-error',
+                name: 'pay-error',
+                component: PayError
             },
         ]
     },

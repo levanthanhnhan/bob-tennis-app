@@ -19,7 +19,7 @@
             <div class="col-10">
               <div class="numbers">
                 <p class="text-sm mb-0 font-weight-bold">
-                  Thu chi Quý {{ getQuarter() }}
+                  Thu chi Quý {{ quarter }}
                 </p>
                 <h5 class="font-weight-bolder mb-0">
                   {{ formatPrice(funds.current) }}
@@ -49,7 +49,7 @@
             <div class="col-10">
               <div class="numbers">
                 <p class="text-sm mb-0 font-weight-bold">
-                  Tổng thu Quý {{ getQuarter() }}
+                  Tổng thu Quý {{ quarter }}
                 </p>
                 <h5 class="font-weight-bolder mb-0">
                   {{ formatPrice(funds.in) }}
@@ -79,7 +79,7 @@
             <div class="col-10">
               <div class="numbers">
                 <p class="text-sm mb-0 font-weight-bold">
-                  Tổng chi Quý {{ getQuarter() }}
+                  Tổng chi Quý {{ quarter }}
                 </p>
                 <h5 class="font-weight-bolder mb-0">
                   {{ formatPrice(funds.out) }}
@@ -122,9 +122,12 @@
 </template>
 
 <script>
+import dateTime from '../../../common/datetime.common.js'
+
 export default {
   data() {
     return {
+      quarter: null,
       funds: {
         in: "38000",
         out: "20000",
@@ -134,23 +137,13 @@ export default {
     };
   },
   methods: {
-    getQuarter() {
-      var month = new Date().getMonth();
-      switch (month) {
-        case (1, 2, 3):
-          return "1";
-        case (4, 5, 6):
-          return "2";
-        case (6, 7, 8):
-          return "3";
-        default:
-          return "4";
-      }
-    },
     formatPrice(value) {
       return value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + "₫";
     },
   },
+  mounted() {
+    this.quarter = dateTime.getQuarter
+  }
 };
 </script>
 <style>
