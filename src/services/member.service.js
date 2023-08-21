@@ -1,17 +1,17 @@
-import http from '../common/http.comon'
+import http from "../common/http.comon";
 
 class MemberService {
-    findAll() {
-        return http.get("/members");
-    }
+  findAll() {
+    return http.common.get("/members");
+  }
 
-    findAdmins() {
-        return http.get("/members/admins");
-    }
+  findAdmins() {
+    return http.common.get("/members/admins");
+  }
 
-    findBirthday() {
-        return http.get("/members/birthday");
-    }
+  findBirthday() {
+    return http.common.get("/members/birthday");
+  }
 }
 
 export default new MemberService();

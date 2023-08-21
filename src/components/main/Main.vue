@@ -15,34 +15,50 @@ import Footer from '../footer/Footer.vue'
 </template>
 
 <script>
+
 export default {
-  mounted() {
-    // Toggle Sidenav
-    const iconNavbarSidenav = document.getElementById('iconNavbarSidenav');
-    const iconSidenav = document.getElementById('iconSidenav');
-    const sidenav = document.getElementById('sidenav-main');
-    let body = document.getElementsByTagName('body')[0];
-    let className = 'g-sidenav-pinned';
+  methods: {
+    setupNav() {
+      // Toggle Sidenav
+      const iconNavbarSidenav = document.getElementById('iconNavbarSidenav');
+      const iconSidenav = document.getElementById('iconSidenav');
+      const sidenav = document.getElementById('sidenav-main');
+      let body = document.getElementsByTagName('body')[0];
+      let className = 'g-sidenav-pinned';
 
-    if (iconNavbarSidenav) {
-      iconNavbarSidenav.addEventListener("click", toggleSidenav);
-    }
+      if (iconNavbarSidenav) {
+        iconNavbarSidenav.addEventListener("click", toggleSidenav);
+      }
 
-    if (iconSidenav) {
-      iconSidenav.addEventListener("click", toggleSidenav);
-    }
+      if (iconSidenav) {
+        iconSidenav.addEventListener("click", toggleSidenav);
+      }
 
-    function toggleSidenav() {
-      if (body.classList.contains(className)) {
-        body.classList.remove(className);
-        sidenav.classList.remove('bg-transparent');
+      function toggleSidenav() {
+        if (body.classList.contains(className)) {
+          body.classList.remove(className);
+          sidenav.classList.remove('bg-transparent');
 
-      } else {
-        body.classList.add(className);
-        sidenav.classList.remove('bg-transparent');
-        iconSidenav.classList.remove('d-none');
+        } else {
+          body.classList.add(className);
+          sidenav.classList.remove('bg-transparent');
+          iconSidenav.classList.remove('d-none');
+        }
+      }
+    },
+    isLogined() {
+      var isLogined = !!this.$store.state.user.accessToken;
+      if (!isLogined) {
+          this.$router.push("/login");
       }
     }
+  },
+  mounted() {
+    //this.isLogined()
+    this.setupNav();
+  },
+  computed() {
+    
   }
 }
 </script>

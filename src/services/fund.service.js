@@ -1,13 +1,13 @@
-import http from '../common/http.comon'
+import http from "../common/http.comon";
 
 class FundService {
-    payWithMoMo() {
-        return http.get("/fund/payWithMoMo");
-    }
+  payWithMoMo() {
+    return http.common.get("/fund/payWithMoMo");
+  }
 
-    findFundMember() {
-        return http.get("/fund")
-    }
+  findFundMember() {
+    return http.common.get("/fund");
+  }
 }
 
 export default new FundService();

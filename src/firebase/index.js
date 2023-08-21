@@ -16,5 +16,7 @@ const app = initializeApp(firebaseConfig);
 
 //initialize firebase auth
 const auth = getAuth()
+auth.settings.appVerificationDisabledForTesting = true;
+auth.useDeviceLanguage();
 
 export { app, auth }

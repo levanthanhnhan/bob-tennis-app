@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import Dashboard from '../components/dashboard/Dashboard.vue'
 import Main from '../components/main/Main.vue'
 import Member from '../components/member/Member.vue'
 import Fund from '../components/fund/Fund.vue'
@@ -14,8 +15,13 @@ const routes = [
         children: [
             {
                 path: '/',
-                name: 'defauft',
-                component: Member
+                name: 'default',
+                component: Dashboard
+            },
+            {
+                path: '/dashboard',
+                name: 'dashboard',
+                component: Dashboard
             },
             {
                 path: '/member',
