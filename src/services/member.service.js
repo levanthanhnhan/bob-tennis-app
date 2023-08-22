@@ -5,12 +5,20 @@ class MemberService {
     return http.common.get("/members");
   }
 
+  findOne() {
+    return http.common.get("/members/2");
+  }
+
   findAdmins() {
     return http.common.get("/members/admins");
   }
 
   findBirthday() {
     return http.common.get("/members/birthday");
+  }
+
+  update() {
+    return http.common.post("/members/update");
   }
 }
 

@@ -190,24 +190,16 @@
             <span class="font-weight-normal text-md ms-2">Tài khoản</span>
           </div>
         </li>
-        <li class="nav-item border-start my-0 pt-2">
-          <a
-            class="nav-link position-relative ms-0 ps-2 py-2"
-            href="../pages/profile.html"
-          >
+        <li class="nav-item border-start my-0 pt-2" @click="push('Hồ sơ')">
+          <router-link to="/profile" active-class="active" class="nav-link">
             <span class="nav-link-text ms-1">Hồ sơ</span>
-          </a>
+          </router-link>
         </li>
         <li class="nav-item border-start my-0 pt-2">
           <router-link to="/login" active-class="active" class="nav-link">
             <span class="nav-link-text ms-1">Đăng xuất</span>
           </router-link>
         </li>
-        <!-- <li class="nav-item border-start my-0 pt-2">
-                <a class="nav-link position-relative ms-0 ps-2 py-2 " href="../pages/sign-up.html">
-                <span class="nav-link-text ms-1">Sign Up</span>
-                </a>
-             </li> -->
       </ul>
     </div>
   </aside>

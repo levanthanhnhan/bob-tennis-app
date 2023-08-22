@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from 'firebase/auth'
+import { getAuth } from 'firebase/auth';
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDFuuGYA891OXuOij4kopZBdvEuHqWATdQ",
@@ -19,4 +20,6 @@ const auth = getAuth()
 auth.settings.appVerificationDisabledForTesting = true;
 auth.useDeviceLanguage();
 
-export { app, auth }
+const storage = getStorage(app);
+
+export { app, auth, storage }

@@ -1,5 +1,5 @@
 <template>
-  <div class="login-clean">
+  <div class="login-login">
     <div class="form">
       <h3 class="mb-3">Đăng nhập</h3>
       <div class="center mb-2">
@@ -181,11 +181,11 @@ export default {
   word-wrap: break-word;
 }
 
-.login-clean {
+.login-login {
   padding: 80px 0;
 }
 
-.login-clean .form {
+.login-login .form {
   text-align: center;
   max-width: 320px;
   width: 90%;
@@ -197,13 +197,13 @@ export default {
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
 }
 
-.login-clean .center {
+.login-login .center {
   text-align: center;
   padding: 0 0 20px;
   font-size: 100px;
 }
 
-.login-clean .form .btn-primary {
+.login-login .form .btn-primary {
   width: 100%;
   border-radius: 4px;
   padding: 11px;

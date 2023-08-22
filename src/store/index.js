@@ -2,7 +2,7 @@ import { createStore } from "vuex";
 
 export default createStore({
     state: {
-        pageTitle: 'Thành viên',
+        pageTitle: 'Tổng quan',
         user: {
           uid: null,
           accessToken: null,

@@ -57,8 +57,5 @@ export default {
     //this.isLogined()
     this.setupNav();
   },
-  computed() {
-    
-  }
 }
 </script>
