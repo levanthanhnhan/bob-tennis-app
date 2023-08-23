@@ -23,7 +23,7 @@
             </li>
             <li class="nav-item ps-2 d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body p-0">
-                <img src="https://img.icons8.com/windows/32/user-male-circle.png" class="avatar avatar-sm" alt="avatar" />
+                <img :src="this.$store.state.userLocal.img_path" class="avatar avatar-sm" alt="avatar" />
               </a>
             </li>
           </ul>

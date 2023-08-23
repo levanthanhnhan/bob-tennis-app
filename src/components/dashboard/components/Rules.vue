@@ -10,7 +10,6 @@
       <div
         class="card-body position-relative z-index-1 d-flex flex-column h-100 p-3"
       >
-        <img class="pinned" src="../../../assets/icons/icon_pin.png" width="35" height="35"/>
         <h5 class="text-white font-weight-bolder mb-3 pt-2">NỘI QUY HỘI</h5>
         <ul class="rules">
           <li class="content-rules">Thời gian sinh hoạt từ 17h00 đến 19h00 các ngày: Thứ 2, Thứ 4, Thứ 6 và Chủ Nhật hàng tuần.</li>
@@ -23,20 +22,23 @@
         </ul>
       </div>
     </div>
+    
+    <img class="pinned" src="../../../assets/icons/icon_pin.png" width="35" height="35"/>
   </div>
 </template>
 <style>
 .rules {
-    list-style-type: disc !important;
-    padding-left:1em !important;
-    margin-left:1em;
+  list-style-type: disc !important;
+  padding-left:1em !important;
+  margin-left:1em;
 }
 .content-rules {
-    font-weight: lighter;
-    color: rgb(219, 219, 219);
+  font-weight: lighter;
+  color: rgb(219, 219, 219);
 }
 .pinned {
-  position: fixed;
-  margin-top: -40px;
+  position: absolute;
+  left: 35px;
+  top: -5px;
 }
 </style>

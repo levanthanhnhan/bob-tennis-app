@@ -191,14 +191,14 @@
           </div>
         </li>
         <li class="nav-item border-start my-0 pt-2" @click="push('Hồ sơ')">
-          <router-link to="/profile" active-class="active" class="nav-link">
+          <router-link :to="`/profile/${this.$store.state.userLocal.member_id}`" active-class="active" class="nav-link">
             <span class="nav-link-text ms-1">Hồ sơ</span>
           </router-link>
         </li>
         <li class="nav-item border-start my-0 pt-2">
-          <router-link to="/login" active-class="active" class="nav-link">
+          <p @click="logout" active-class="active" class="nav-link" style="cursor: pointer;">
             <span class="nav-link-text ms-1">Đăng xuất</span>
-          </router-link>
+          </p>
         </li>
       </ul>
     </div>
@@ -206,13 +206,16 @@
 </template>
 
 <script>
+
+import { auth } from "../../firebase";
 import { signOut } from "firebase/auth";
 
 export default {
   methods: {
-    logout() {
-      signOut();
-      this.$route.push("/login");
+    async logout() {
+      await signOut(auth);
+      sessionStorage.clear();
+      this.$router.push("/login");
     },
     push(value) {
       this.$store.commit("changePageTitle", value);

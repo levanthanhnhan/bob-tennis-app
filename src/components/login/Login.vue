@@ -24,6 +24,7 @@
           v-if="!isVerify"
           v-model="phoneNumber"
           required
+          minlength="10"
           type="tel"
           class="form-control"
           placeholder="Nhập số điện thoại"
@@ -32,7 +33,13 @@
       <div class="code">
         {{ msgError }}
       </div>
-      <div @click="resendOTP" class="resend-otp" v-if="this.msgError == this.messages.OTPNotMatch">Gửi lại mã OTP</div>
+      <div
+        @click="resendOTP"
+        class="resend-otp"
+        v-if="this.msgError == this.messages.OTPNotMatch"
+      >
+        Gửi lại mã OTP
+      </div>
       <div class="form-group">
         <button
           class="btn btn-primary"
@@ -60,6 +67,8 @@ import { auth } from "../../firebase";
 import { signInWithPhoneNumber, RecaptchaVerifier } from "firebase/auth";
 import authService from "../../services/auth.service.js";
 import http from "../../common/http.comon";
+import strCommon from "../../common/string.common";
+import memberService from "../../services/member.service";
 
 export default {
   data() {
@@ -99,14 +108,16 @@ export default {
       }
 
       this.msgError = "";
+      var phoneNumber = strCommon.getPhoneNumber(this.phoneNumber);
+
+      // Check phoneNumber is exist in db
       authService
-        .findByPhoneNumber(this.phoneNumber)
+        .findByPhoneNumber(phoneNumber)
         .then((result) => {
           // Exist phone number in db
           if (result.data[0].count > 0) {
             this.signInWithPhoneNumber();
-          }
-          else {
+          } else {
             this.msgError = this.messages.phoneNotExist;
           }
         })
@@ -116,7 +127,9 @@ export default {
     },
     signInWithPhoneNumber() {
       this.generateRecaptcha();
-      var phoneNumber = "+84" + this.phoneNumber;
+      var phoneNumber = strCommon.getPhoneNumber(this.phoneNumber);
+
+      // Sign in Firebase
       signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier)
         .then((confirmationResult) => {
           this.isVerify = !this.isVerify;
@@ -137,9 +150,13 @@ export default {
       confirmationResult
         .confirm(this.otpCode)
         .then((result) => {
+          // Login Success
+          // Set Token
           http.common.interceptors.request.use(
             (config) => {
-              config.headers["Authorization"] = `Bearer ${result.user.accessToken}`;
+              config.headers[
+                "Authorization"
+              ] = `Bearer ${result.user.accessToken}`;
               return config;
             },
             (error) => {
@@ -148,12 +165,26 @@ export default {
             }
           );
 
+          // Store User Firebase
           this.$store.commit("setUser", result.user);
-          this.$router.push("/");
+
+          // Store User Local
+          this.storeUser(strCommon.getPhoneNumber(result.user.phoneNumber));
         })
         .catch((error) => {
           // Bad verification code
-          this.msgError = this.messages.OTPNotMatch
+          this.msgError = this.messages.OTPNotMatch;
+          console.log(error);
+        });
+    },
+    storeUser(phoneNumber) {
+      memberService
+        .findByPhoneNumber(phoneNumber)
+        .then((result) => {
+          this.$store.commit("setUserLocal", result.data[0]);
+          this.$router.push("/");
+        })
+        .catch((error) => {
           console.log(error);
         });
     },

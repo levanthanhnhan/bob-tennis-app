@@ -36,7 +36,7 @@
               >
                 Liên lạc
               </th>
-              <th class="text-secondary opacity-7" v-bind:hidden="true"></th>
+              <th class="text-secondary opacity-7" v-bind:hidden="!this.$store.state.userLocal.is_admin"></th>
             </tr>
           </thead>
           <tbody>
@@ -55,7 +55,9 @@
                 </div>
               </td>
               <td class="align-middle text-center">
-                <span class="text-secondary text-xs font-weight-bold">{{ toDateTime(member.birthday) }}</span>
+                <span class="text-secondary text-xs font-weight-bold">{{
+                  toDateTime(member.birthday)
+                }}</span>
               </td>
               <td class="align-middle text-center">
                 <span class="text-secondary text-xs font-weight-bold">{{
@@ -87,14 +89,14 @@
                     class="avatar avatar-xs me-3"
                 /></a>
               </td>
-              <td class="align-middle" v-bind:hidden="true">
-                <a
-                  href="javascript:;"
+              <td class="align-middle" v-bind:hidden="!this.$store.state.userLocal.is_admin">
+                <router-link
+                  :to="`/profile/${member.member_id}`"
                   class="text-secondary font-weight-bold text-xs"
                   data-original-title="Edit member"
                 >
                   Edit
-                </a>
+                </router-link>
               </td>
             </tr>
           </tbody>
@@ -105,7 +107,7 @@
 </template>
 
 <script>
-import moment from 'moment';
+import moment from "moment";
 import service from "../../../services/member.service.js";
 
 export default {
@@ -126,8 +128,8 @@ export default {
         });
     },
     toDateTime(value) {
-        return moment(value).format('DD/MM/YYYY');
-    }
+      return moment(value).format("DD/MM/YYYY");
+    },
   },
   mounted() {
     this.findAll();

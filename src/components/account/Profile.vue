@@ -1,15 +1,28 @@
 <script setup>
 import Datepicker from "vuejs3-datepicker";
+import UpdateModal from "./components/UpdateModal.vue";
 import { VueSpinnerDots } from "vue3-spinners";
 </script>
 <template>
   <input type="file" ref="myfile" id="inputOpenFile" v-bind:hidden="true" />
   <button id="btnUpload" v-bind:hidden="true" @click="upload"></button>
   <div class="row align-items-center">
+    <div
+      class="alert alert-success mb-4"
+      role="alert"
+      v-if="updateStatus.success"
+    >
+      <span class="alert-success-content">Cập nhật tài khoản thành công!</span>
+    </div>
+    <div class="alert alert-danger" role="alert" v-if="updateStatus.error">
+      <span class="alert-danger-content"
+        >Cập nhật thất bại. Vui lòng thử lại!</span
+      >
+    </div>
     <div class="mx-auto text-center ms-3 mb-md-5">
       <img
+        :src="member.img_path"
         id="imgAvatar"
-        :src="imgPath"
         width="100"
         height="100"
         class="pf-avatar mb-3"
@@ -21,12 +34,12 @@ import { VueSpinnerDots } from "vue3-spinners";
       <h4>{{ member.member_name }}</h4>
     </div>
   </div>
-  <form @submit.prevent="update">
+  <form @submit.prevent="confirmUpdate">
     <div class="row">
       <div class="col-md-3 mb-3">
         <label for="txtFullName">Họ tên</label>
         <input
-        v-model="member.member_name"
+          v-model="member.member_name"
           type="text"
           class="form-control"
           id="txtFullName"
@@ -56,6 +69,7 @@ import { VueSpinnerDots } from "vue3-spinners";
               class="form-control"
               id="txtPhoneNumber"
               placeholder="Số điện thoại"
+              minlength="10"
               required
             />
           </div>
@@ -67,7 +81,6 @@ import { VueSpinnerDots } from "vue3-spinners";
           <Datepicker
             placeholder="Ngày sinh"
             v-model="member.birthday"
-            @input="dateSelected"
             language="vn"
           ></Datepicker>
         </div>
@@ -90,7 +103,7 @@ import { VueSpinnerDots } from "vue3-spinners";
       <div class="col-md-3 mb-3">
         <label for="txtLevel">Điểm trình</label>
         <div class="form-input">
-          <select class="form-select" id="txtLevel">
+          <select class="form-select" id="txtLevel" v-model="member.level_id">
             <option
               v-for="level in levels"
               :value="level.level_id"
@@ -104,10 +117,10 @@ import { VueSpinnerDots } from "vue3-spinners";
       <div class="col-md-3 mb-3">
         <label for="txtRole">Vai trò</label>
         <div class="form-input">
-          <select class="form-select" id="txtRole">
+          <select class="form-select" id="txtRole" v-model="member.role_id">
             <option
               v-for="role in roles"
-              value="role.role_id"
+              :value="role.role_id"
               :selected="role.role_id == member.role_id"
             >
               {{ role.role_name }}
@@ -138,6 +151,18 @@ import { VueSpinnerDots } from "vue3-spinners";
     </div>
     <button class="btn btn-primary" type="submit">CẬP NHẬT</button>
   </form>
+
+  <Teleport to="body">
+    <UpdateModal
+      :show="isShowModal"
+      @close="isShowModal = false"
+      @update="update"
+    >
+      <template #header>
+        <h3>custom header</h3>
+      </template>
+    </UpdateModal>
+  </Teleport>
 </template>
 
 <script>
@@ -156,6 +181,11 @@ export default {
       member: {},
       roles: [],
       levels: [],
+      isShowModal: false,
+      updateStatus: {
+        success: false,
+        error: false,
+      },
     };
   },
   mounted() {
@@ -166,12 +196,29 @@ export default {
     this.imgAvatarLoaded();
   },
   methods: {
+    confirmUpdate() {
+      this.isShowModal = true;
+    },
     update() {
-        alert(this.member.member_name)
+      console.log(this.member);
+      memberService
+        .update(this.member)
+        .then((result) => {
+          if (result.data == 1) this.updateStatus.success = true;
+          this.updateStatus.error = false;
+          this.isShowModal = false;
+        })
+        .catch((error) => {
+          this.updateStatus.success = false;
+          this.updateStatus.error = true;
+          this.isShowModal = false;
+          console.log(error);
+        });
     },
     getMember() {
+      var id = window.location.pathname.split("/")[2];
       memberService
-        .findOne()
+        .findOne(id)
         .then((result) => {
           this.member = result.data[0];
         })
@@ -205,18 +252,17 @@ export default {
         self.isUploading = false;
       };
     },
-    dateSelected(payload) {
-      console.log("dateSelected", payload);
-    },
     openFile() {
       document.getElementById("inputOpenFile").click();
     },
     selectFile() {
+      var self = this;
       document
         .getElementById("inputOpenFile")
         .addEventListener("change", function (e) {
           if (e.target.files[0]) {
-            document.getElementById("btnUpload").click();
+            self.member.img_path = window.URL.createObjectURL(e.target.files[0]);
+            //document.getElementById("btnUpload").click();
           }
         });
     },
@@ -225,7 +271,16 @@ export default {
       const storageRef = ref(storage, `files/${this.makeCurentDate()}`);
       uploadBytes(storageRef, this.$refs.myfile.files[0]).then((snapshot) => {
         getDownloadURL(snapshot.ref).then((url) => {
-          this.imgPath = url;
+          // Get URL when upload success
+          this.member.img_path = url;
+
+          // Update avatar path when owner
+          if (this.member.member_id == this.$store.state.userLocal.member_id) {
+            // Store image path
+            var userLocal = this.$store.state.userLocal;
+            userLocal.img_path = url;
+            this.$store.commit("setUserLocal", userLocal);
+          };
         });
       });
     },
@@ -266,7 +321,10 @@ export default {
   padding-left: 5px;
 }
 .vuejs3-datepicker__value {
+  box-shadow: 0 1px 2px 0 rgba(12, 26, 36, 0.06);
+  border-color: #dde0e5 !important;
   height: 40px;
+  min-width: 100% !important;
 }
 .vuejs3-datepicker__icon {
   margin-top: -10px;
@@ -274,5 +332,25 @@ export default {
 .vuejs3-datepicker__content {
   margin-top: -5px;
   font-size: 14px !important;
+}
+.vuejs3-datepicker {
+  display: grid !important;
+}
+.alert-success {
+  color: #155724;
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+  padding: 5px;
+}
+.alert-success-content {
+  margin-left: 10px;
+  font-size: 14px;
+}
+.alert-danger {
+  padding: 5px;
+}
+.alert-danger-content {
+  margin-left: 10px;
+  font-size: 14px;
 }
 </style>

@@ -5,8 +5,8 @@ class MemberService {
     return http.common.get("/members");
   }
 
-  findOne() {
-    return http.common.get("/members/2");
+  findOne(id) {
+    return http.common.get("/members/" + id);
   }
 
   findAdmins() {
@@ -17,8 +17,15 @@ class MemberService {
     return http.common.get("/members/birthday");
   }
 
-  update() {
-    return http.common.post("/members/update");
+  findByPhoneNumber(phoneNumber) {
+    var data = {
+      phoneNumber: phoneNumber,
+    };
+    return http.common.post("/members/phoneNumber", JSON.stringify(data));
+  }
+
+  update(member) {
+    return http.common.post("/members/update", JSON.stringify(member));
   }
 }
 
