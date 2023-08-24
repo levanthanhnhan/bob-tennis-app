@@ -25,12 +25,13 @@ import { VueSpinnerDots } from "vue3-spinners";
         id="imgAvatar"
         width="100"
         height="100"
-        class="pf-avatar mb-3"
+        class="pf-avatar mb-2"
         @click="openFile"
       />
       <div v-if="isUploading" class="mx-auto mb-1">
         <VueSpinnerDots size="40" color="#774dd3" />
       </div>
+      <div v-if="isShowImgOverSize" class="code mb-1">Dung lượng ảnh không vượt quá 5MB</div>
       <h4>{{ member.member_name }}</h4>
     </div>
   </div>
@@ -159,7 +160,6 @@ import { VueSpinnerDots } from "vue3-spinners";
       @update="update"
     >
       <template #header>
-        <h3>custom header</h3>
       </template>
     </UpdateModal>
   </Teleport>
@@ -182,6 +182,7 @@ export default {
       roles: [],
       levels: [],
       isShowModal: false,
+      isShowImgOverSize: false,
       updateStatus: {
         success: false,
         error: false,
@@ -204,9 +205,11 @@ export default {
       memberService
         .update(this.member)
         .then((result) => {
-          if (result.data == 1) this.updateStatus.success = true;
-          this.updateStatus.error = false;
-          this.isShowModal = false;
+          if (result.data == 1) {
+            this.updateStatus.success = true;
+            this.updateStatus.error = false;
+            this.isShowModal = false;
+          }
         })
         .catch((error) => {
           this.updateStatus.success = false;
@@ -261,13 +264,20 @@ export default {
         .getElementById("inputOpenFile")
         .addEventListener("change", function (e) {
           if (e.target.files[0]) {
-            self.member.img_path = window.URL.createObjectURL(e.target.files[0]);
-            //document.getElementById("btnUpload").click();
+            self.isShowImgOverSize = false;
+
+            // Check size file over 5Mb
+            if (e.target.files[0].size > (1024*1024*5)) {
+              self.isShowImgOverSize = true;
+            }
+            else {
+              this.isUploading = true;
+              document.getElementById("btnUpload").click();
+            }
           }
         });
     },
     upload() {
-      this.isUploading = true;
       const storageRef = ref(storage, `files/${this.makeCurentDate()}`);
       uploadBytes(storageRef, this.$refs.myfile.files[0]).then((snapshot) => {
         getDownloadURL(snapshot.ref).then((url) => {
@@ -280,7 +290,7 @@ export default {
             var userLocal = this.$store.state.userLocal;
             userLocal.img_path = url;
             this.$store.commit("setUserLocal", userLocal);
-          };
+          }
         });
       });
     },

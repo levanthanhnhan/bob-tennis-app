@@ -1,8 +1,12 @@
 import http from "../common/http.comon";
 
 class FundService {
-  payWithMoMo() {
-    return http.common.get("/fund/payWithMoMo");
+  maxOrderCode() {
+    return http.common.get("/fund/maxOrderCode");
+  }
+
+  createOrder(data) {
+    return http.common.post("/fund/createOrder", JSON.stringify(data));
   }
 
   findFundMember() {

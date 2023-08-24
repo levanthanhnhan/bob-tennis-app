@@ -22,9 +22,9 @@
               </a>
             </li>
             <li class="nav-item ps-2 d-flex align-items-center">
-              <a href="javascript:;" class="nav-link text-body p-0">
+              <router-link :to="`/profile/${this.$store.state.userLocal.member_id}`" class="nav-link text-body p-0">
                 <img :src="this.$store.state.userLocal.img_path" class="avatar avatar-sm" alt="avatar" />
-              </a>
+              </router-link>
             </li>
           </ul>
         </div>
