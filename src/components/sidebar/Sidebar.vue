@@ -214,7 +214,7 @@ export default {
   methods: {
     async logout() {
       await signOut(auth);
-      sessionStorage.clear();
+      localStorage.clear();
       this.$router.push("/login");
     },
     push(value) {

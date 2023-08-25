@@ -1,33 +1,45 @@
 <script setup>
 import FundStatusModal from "./FundStatusModal.vue";
 import fundService from "../../../services/fund.service";
-import memberService from "../../../services/member.service";
+import billingService from "../../../services/billing.service";
+
 </script>
 
 <template>
   <p class="">Quỹ năm {{ new Date().getFullYear() }}</p>
   <div class="row removable">
+    <div
+      v-if="(isPaidFund != null) & (isPaidFund == 'PAID')"
+      class="alert alert-success mb-4"
+    >
+      <span class="alert-success-content">Đã nạp quỹ thành công!</span>
+    </div>
+    <div
+      class="alert alert-danger mb-4"
+      v-if="(isPaidFund != null) & (isPaidFund != 'PAID')"
+    >
+      <span class="alert-danger-content"
+        >Nạp quỹ không thành công. Vui lòng thực hiện lại!</span
+      >
+    </div>
     <table id="table" class="tg">
       <tbody id="tbody"></tbody>
     </table>
   </div>
 
-  <Teleport to="body">
-    <FundStatusModal
-      :show="isShowModal"
-      @close="isShowModal = false"
-      @update="update"
-    >
-      <template #header> </template>
-    </FundStatusModal>
-  </Teleport>
+  <FundStatusModal
+    :show="isShowModal"
+    :billing="billing"
+    @close="isShowModal = false"
+    @createOrder="createOrderPayOS"
+  >
+  </FundStatusModal>
 </template>
 
 <script>
 import $ from "jquery";
 import getDeviceType from "../../../common/device.common";
 import dateTime from "../../../common/datetime.common";
-import payOS from "../../../common/payos.common";
 
 export default {
   data() {
@@ -40,13 +52,68 @@ export default {
         PAID: 1,
       },
       isShowModal: false,
+      billing: {
+        status: 0,
+        amount: import.meta.env.VITE_FUND_PRICE,
+        member_name: null,
+      },
+      cellId: null,
+      isPaidFund: null,
     };
   },
   methods: {
-    async createOrderPayOS(cellId) {
+    openModal(cellId, cellClass, cellName) {
+      this.isShowModal = true;
+      var params = cellId.split("-");
+      var data = {
+        member_id: params[0],
+        quarter: params[1],
+        year: params[2],
+      };
+
+      if (cellClass.includes("success")) {
+        billingService
+          .billingByMember(data)
+          .then((response) => {
+            if (response.data.length > 0) {
+              this.billing = response.data[0];
+              this.billing.member_name = cellName;
+              this.billing.quarter = data.quarter;
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      } else {
+        this.billing = {
+          status: 0,
+          amount: import.meta.env.VITE_FUND_PRICE,
+          member_name: cellName,
+          quarter: data.quarter,
+        };
+      }
+    },
+    async createOrderPayOS() {
       var orderCode = (await this.getMaxOrderCode()) + 1;
-      var signature = payOS.createSignature(orderCode);
-      console.log(signature);
+      var params = this.cellId.split("-");
+      var data = {
+        orderCode: orderCode,
+        memberId: params[0],
+        quarter: params[1],
+        year: params[2],
+      };
+      fundService
+        .createOrder(data)
+        .then((response) => {
+          if (response.data.code == 0) {
+            var checkoutLink = response.data.desc;
+            window.open(checkoutLink, "_blank");
+            this.isShowModal = false;
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
     async getMaxOrderCode() {
       var orderCode = await fundService
@@ -162,11 +229,12 @@ export default {
       $("#table td").click(function () {
         var cellId = $(this).attr("id");
         var cellClass = $(this).attr("class");
+        var cellName = $(this).attr("name");
+        self.cellId = cellId;
 
         // If click cell empty is not show Modal
-        if (!cellId.includes("0") && !cellClass.includes("none")) {
-          self.createOrderPayOS(cellId);
-          //self.isShowModal = true;
+        if (!cellId.includes("-0-") && !cellClass.includes("none")) {
+          self.openModal(cellId, cellClass, cellName);
         }
       });
     },
@@ -178,7 +246,9 @@ export default {
         j +
         "-" +
         this.members[i - 1].year +
-        " class='tg tg-0lax tg-content error'></td>";
+        " name='" +
+        this.members[i - 1].member_name +
+        "' class='tg tg-0lax tg-content error'></td>";
 
       // Check if current quarter is small Quarter1, 2, 3, 4
       if (this.curentQuarter < type) {
@@ -189,7 +259,9 @@ export default {
           j +
           "-" +
           this.members[i - 1].year +
-          " class='tg tg-0lax none'></td>";
+          " name='" +
+          this.members[i - 1].member_name +
+          "' class='tg tg-0lax none'></td>";
       } else {
         // Check member is pay (0: none, 1: paid)
         if (value == this.payType.NONE) {
@@ -200,7 +272,9 @@ export default {
             j +
             "-" +
             this.members[i - 1].year +
-            " class='tg tg-0lax tg-content error'></td>";
+            " name='" +
+            this.members[i - 1].member_name +
+            "' class='tg tg-0lax tg-content error'></td>";
         } else {
           td =
             "<td id=" +
@@ -209,17 +283,33 @@ export default {
             j +
             "-" +
             this.members[i - 1].year +
-            " class='tg tg-0lax tg-content success'></td>";
+            " name='" +
+            this.members[i - 1].member_name +
+            "' class='tg tg-0lax tg-content success'></td>";
         }
       }
 
       return td;
     },
+    getParameters() {
+      this.isPaidFund = new URLSearchParams(window.location.search).get(
+        "status"
+      );
+    },
   },
   mounted() {
     this.getMembers();
+    this.getParameters();
     this.deviceType = getDeviceType;
     this.curentQuarter = dateTime.getQuarter;
+
+    $(".btn").on("click", function () {
+      var $this = $(this);
+      $this.button("loading");
+      setTimeout(function () {
+        $this.button("reset");
+      }, 8000);
+    });
   },
 };
 </script>
