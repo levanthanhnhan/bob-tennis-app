@@ -3,8 +3,6 @@ const props = defineProps({
   show: Boolean,
   billing: Object,
 });
-
-import { VueSpinnerClip } from "vue3-spinners";
 </script>
 
 <template>
@@ -18,9 +16,11 @@ import { VueSpinnerClip } from "vue3-spinners";
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div class="modal-body">
+          <div class="modal-body border-dash">
             <slot name="body">
-              <p class="font-weight-bolder mb-3 pt-2">THÔNG TIN QUÝ {{ billing.quarter }}</p>
+              <p class="font-weight-bolder mb-3 pt-4">
+                THÔNG TIN QUÝ {{ billing.quarter }}
+              </p>
               <ul class="fund">
                 <li class="content-fund">
                   <p style="font-size: 14px">
@@ -33,9 +33,11 @@ import { VueSpinnerClip } from "vue3-spinners";
                 <li class="content-fund">
                   <p style="font-size: 14px">
                     Số tiền:
-                    <span style="font-size: 14px; font-weight: bold">{{
-                      new Intl.NumberFormat().format(billing.amount)
-                    }}₫</span>
+                    <span style="font-size: 14px; font-weight: bold"
+                      >{{
+                        new Intl.NumberFormat().format(billing.amount)
+                      }}₫</span
+                    >
                   </p>
                 </li>
                 <li v-if="billing.status == 0" class="content-fund">
@@ -76,16 +78,26 @@ import { VueSpinnerClip } from "vue3-spinners";
             </slot>
           </div>
           <div class="modal-footer">
-            <button
+            <!-- <button
               type="button"
               class="btn btn-danger"
               @click="$emit('createOrder')"
               v-if="billing.status == 0"
             >
             NẠP QUỸ
-            <!-- <VueSpinnerClip size="14" color="#fff" style="position: absolute !important;" />-->
+            <VueSpinnerClip size="14" color="#fff" style="position: absolute !important;" />
+            </button>-->
+
+            <button
+              type="button"
+              class="btn btn btn-danger"
+              onclick="this.classList.toggle('btn--loading')"
+              @click="$emit('createOrder')"
+              v-if="billing.status == 0"
+            >
+              <span class="btn__text">NẠP QUỸ</span>
             </button>
-            
+
             <button
               style="margin-left: 10px"
               type="button"
@@ -102,6 +114,10 @@ import { VueSpinnerClip } from "vue3-spinners";
 </template>
 
 <style>
+.border-dash {
+  border-top: 1px dashed #8f8f8f;
+}
+
 .fund {
   list-style-type: disc !important;
   padding-left: 1em !important;
@@ -110,5 +126,45 @@ import { VueSpinnerClip } from "vue3-spinners";
 .content-fund {
   font-weight: lighter;
   color: rgb(80, 80, 80);
+}
+
+.btn {
+  position: relative;
+}
+
+.btn__text {
+  color: #ffffff;
+  transition: all 0.2s;
+}
+
+.btn--loading .btn__text {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.btn--loading::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  border: 4px solid transparent;
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: btn-loading-spinner 1s ease infinite;
+}
+
+@keyframes btn-loading-spinner {
+  from {
+    transform: rotate(0turn);
+  }
+
+  to {
+    transform: rotate(1turn);
+  }
 }
 </style>

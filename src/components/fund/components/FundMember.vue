@@ -112,6 +112,8 @@ export default {
           }
         })
         .catch((e) => {
+          this.isShowModal = false;
+          this.isPaidFund = "ERROR";
           console.log(e);
         });
     },
@@ -126,6 +128,8 @@ export default {
           }
         })
         .catch((e) => {
+          this.isShowModal = false;
+          this.isPaidFund = "ERROR";
           console.log(e);
         });
 
@@ -302,14 +306,6 @@ export default {
     this.getParameters();
     this.deviceType = getDeviceType;
     this.curentQuarter = dateTime.getQuarter;
-
-    $(".btn").on("click", function () {
-      var $this = $(this);
-      $this.button("loading");
-      setTimeout(function () {
-        $this.button("reset");
-      }, 8000);
-    });
   },
 };
 </script>

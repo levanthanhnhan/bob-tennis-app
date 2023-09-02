@@ -147,9 +147,20 @@
             <span class="nav-link-text ms-1">Quỹ hội</span>
           </router-link>
         </li>
-        <li class="nav-item mt-2">
-          <div class="d-flex align-items-center nav-link">
-            <svg width="30px" height="30px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+        <li class="nav-item" @click="push('Giải B.O.B')">
+          <router-link to="/tournament" active-class="active" class="nav-link">
+            <div
+              class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center"
+            >
+              <svg
+                width="30px"
+                height="30px"
+                viewBox="0 0 48 48"
+                version="1.1"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+              >
                 <title>table</title>
                 <g id="table" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                   <g id="view-grid" transform="translate(12.000000, 12.000000)" fill="#FFFFFF" fill-rule="nonzero">
@@ -160,16 +171,9 @@
                   </g>
                 </g>
               </svg>
-            <span class="font-weight-normal text-md ms-2">Giải B.O.B</span>
-          </div>
-        </li>
-        <li class="nav-item border-start my-0 pt-2">
-          <a
-            class="nav-link position-relative ms-0 ps-2 py-2"
-            href="../pages/profile.html"
-          >
-            <span class="nav-link-text ms-1">Lần 1</span>
-          </a>
+            </div>
+            <span class="nav-link-text ms-1">Giải B.O.B</span>
+          </router-link>
         </li>
         <li class="nav-item mt-2">
           <div class="d-flex align-items-center nav-link">
@@ -227,5 +231,8 @@ export default {
 <style>
 #sidenav-collapse-main {
   overflow: hidden;
+}
+.sidenav {
+  left: -2px !important;
 }
 </style>

@@ -1,3 +1,4 @@
 <template>
-    Pay success
 </template>
+<style>
+</style>

@@ -152,18 +152,7 @@ export default {
         .then((result) => {
           // Login Success
           // Set Token
-          http.common.interceptors.request.use(
-            (config) => {
-              config.headers[
-                "Authorization"
-              ] = `Bearer ${result.user.accessToken}`;
-              return config;
-            },
-            (error) => {
-              this.$router("/login");
-              return Promise.reject(error);
-            }
-          );
+          authService.setTokenHeader(result.user.accessToken);
 
           // Store User Firebase
           this.$store.commit("setUser", result.user);
