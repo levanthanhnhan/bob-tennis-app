@@ -1,4 +1,6 @@
 import http from "../common/http.comon";
+import { auth } from "../firebase";
+import { signOut } from "firebase/auth";
 
 class AuthService {
   findByPhoneNumber(phoneNumber) {
@@ -14,7 +16,9 @@ class AuthService {
     };
 
     try {
-      data.token = JSON.parse(window.localStorage.getItem("vuex")).user.accessToken;
+      data.token = JSON.parse(
+        window.localStorage.getItem("vuex")
+      ).user.accessToken;
     } catch (error) {
       data.token = "";
     }
@@ -22,7 +26,6 @@ class AuthService {
     var res = await http.auth
       .post("/isAuthenticated", JSON.stringify(data))
       .then((res) => {
-        this.setTokenHeader(data.token);
         return res.data;
       })
       .catch((error) => {
@@ -32,17 +35,9 @@ class AuthService {
     return res;
   }
 
-  setTokenHeader(token) {
-    http.common.interceptors.request.use(
-      (config) => {
-        config.headers["Authorization"] = `Bearer ${token}`;
-        return config;
-      },
-      (error) => {
-        this.$router("/login");
-        return Promise.reject(error);
-      }
-    );
+  async logout() {
+    await signOut(auth);
+    localStorage.clear();
   }
 }
 

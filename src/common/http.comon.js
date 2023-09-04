@@ -7,6 +7,29 @@ const httpCommon = axios.create({
   },
 });
 
+// Add a request interceptor
+httpCommon.interceptors.request.use(
+  (config) => {
+    const token = JSON.parse(window.localStorage.getItem("vuex")).user.accessToken;
+    config.headers["Authorization"] = `Bearer ${token}`;
+    return config;
+  },
+  (error) => {
+    this.$router("/login");
+    return Promise.reject(error);
+  }
+);
+
+// Add a response interceptor
+httpCommon.interceptors.response.use(function (response) {
+  if (response.status != 200) {
+    this.$router("/login");
+  }
+  return response;
+}, function (error) {
+  return Promise.reject(error);
+});
+
 const httpAuth = axios.create({
   baseURL: import.meta.env.VITE_HOST_AUTH,
   headers: {
@@ -17,6 +40,6 @@ const httpAuth = axios.create({
 const http = {
   auth: httpAuth,
   common: httpCommon,
-}
+};
 
 export default http;

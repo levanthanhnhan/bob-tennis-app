@@ -73,15 +73,9 @@ const router = createRouter({
 router.beforeEach(async (to, from) => {
   const isAuthenticated = await authService.isAuthenticated();
   if (!isAuthenticated && to.name !== "login") {
-    await logout();
+    await authService.logout();
     return { name: "login" };
   }
 });
-
-async function logout() {
-  await signOut(auth);
-  localStorage.clear();
-  this.$router.push("/login");
-}
 
 export default router;

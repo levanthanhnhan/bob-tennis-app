@@ -3,7 +3,7 @@
     <div
       class="overflow-hidden position-relative border-radius-lg bg-cover h-100"
       style="
-        background-image: url(https://demos.creative-tim.com/soft-ui-dashboard/assets/img/ivancik.jpg);
+        background-image: url('../../../src/assets/img/tennis-court.jpg');
       "
     >
       <span class="mask bg-gradient-dark"></span>
@@ -34,7 +34,7 @@
 }
 .content-rules {
   font-weight: lighter;
-  color: rgb(219, 219, 219);
+  color: rgb(229 229 229);
 }
 .pinned {
   position: absolute;

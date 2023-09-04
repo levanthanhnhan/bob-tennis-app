@@ -150,10 +150,6 @@ export default {
       confirmationResult
         .confirm(this.otpCode)
         .then((result) => {
-          // Login Success
-          // Set Token
-          authService.setTokenHeader(result.user.accessToken);
-
           // Store User Firebase
           this.$store.commit("setUser", result.user);
 
