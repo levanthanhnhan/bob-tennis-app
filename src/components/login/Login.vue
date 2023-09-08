@@ -66,7 +66,6 @@
 import { auth } from "../../firebase";
 import { signInWithPhoneNumber, RecaptchaVerifier } from "firebase/auth";
 import authService from "../../services/auth.service.js";
-import http from "../../common/http.comon";
 import strCommon from "../../common/string.common";
 import memberService from "../../services/member.service";
 

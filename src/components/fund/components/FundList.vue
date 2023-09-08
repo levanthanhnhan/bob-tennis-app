@@ -1,12 +1,29 @@
 <template>
   <div class="row removable">
+    <div class="row">
+      <div class="col">
+        <p class="">Thông tin Quỹ</p>
+      </div>
+      <div class="col">
+        <router-link
+          :to="`/fund/detail`"
+          class="nav-link text-body p-0"
+        >
+          <p style="text-align: right; font-size: 13px; cursor: pointer">
+            Xem chi tiết
+          </p>
+        </router-link>
+      </div>
+    </div>
     <div class="col-xl-3 col-sm-6 drop-zone">
       <div class="card bg-gradient-dark draggable mb-4" draggable="true">
         <div class="card-body p-3">
           <div class="row">
             <div class="col-8">
               <div class="numbers">
-                <p class="text-sm mb-0 text-capitalize text-white font-weight-lighter">
+                <p
+                  class="text-sm mb-0 text-capitalize text-white font-weight-lighter"
+                >
                   Tổng Quỹ
                 </p>
                 <h5 class="font-weight-bolder text-white mb-0">
@@ -34,7 +51,9 @@
           <div class="row">
             <div class="col-8">
               <div class="numbers">
-                <p class="text-sm mb-0 text-capitalize text-white font-weight-lighter">
+                <p
+                  class="text-sm mb-0 text-capitalize text-white font-weight-lighter"
+                >
                   Tổng thu Quý {{ quarter }}
                 </p>
                 <h5 class="font-weight-bolder text-white mb-0">
@@ -62,7 +81,9 @@
           <div class="row">
             <div class="col-8">
               <div class="numbers">
-                <p class="text-sm mb-0 text-capitalize text-white font-weight-lighter">
+                <p
+                  class="text-sm mb-0 text-capitalize text-white font-weight-lighter"
+                >
                   Tổng chi Quý {{ quarter }}
                 </p>
                 <h5 class="font-weight-bolder text-white mb-0">
@@ -74,10 +95,7 @@
               <div
                 class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md"
               >
-                <i
-                  class="ni ni-cart text-lg opacity-10"
-                  aria-hidden="true"
-                ></i>
+                <i class="ni ni-cart text-lg opacity-10" aria-hidden="true"></i>
               </div>
             </div>
           </div>
@@ -90,7 +108,9 @@
           <div class="row">
             <div class="col-8">
               <div class="numbers">
-                <p class="text-sm mb-0 text-capitalize text-white font-weight-lighter">
+                <p
+                  class="text-sm mb-0 text-capitalize text-white font-weight-lighter"
+                >
                   Tổng Quỹ Quý {{ quarter }}
                 </p>
                 <h5 class="font-weight-bolder text-white mb-0">
@@ -102,7 +122,10 @@
               <div
                 class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md"
               >
-                <i class="fa fa-money text-lg opacity-10" aria-hidden="true"></i>
+                <i
+                  class="fa fa-money text-lg opacity-10"
+                  aria-hidden="true"
+                ></i>
               </div>
             </div>
           </div>
@@ -113,7 +136,7 @@
 </template>
 
 <script>
-import dateTime from '../../../common/datetime.common.js'
+import dateTime from "../../../common/datetime.common.js";
 
 export default {
   data() {
@@ -133,8 +156,8 @@ export default {
     },
   },
   mounted() {
-    this.quarter = dateTime.getQuarter
-  }
+    this.quarter = dateTime.getQuarter;
+  },
 };
 </script>
 <style>
@@ -153,6 +176,6 @@ export default {
   background-image: linear-gradient(310deg, #7928ca, #ff0080);
 }
 .bg-gradient-dark {
-    background-image: linear-gradient(310deg,#141727,#3a416f);
+  background-image: linear-gradient(310deg, #141727, #3a416f);
 }
 </style>
