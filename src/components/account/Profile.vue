@@ -201,7 +201,6 @@ export default {
       this.isShowModal = true;
     },
     update() {
-      console.log(this.member);
       memberService
         .update(this.member)
         .then((result) => {

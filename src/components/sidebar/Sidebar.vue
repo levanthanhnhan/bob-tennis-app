@@ -166,7 +166,16 @@
             <span class="nav-link-text ms-1">Quỹ hội</span>
           </router-link>
         </li>
-
+        <li class="nav-item border-start my-0 pt-2" @click="push('Khoản Thu')">
+          <router-link to="/fund/receipts" active-class="active" class="nav-link">
+            <span class="nav-link-text ms-1">Khoản Thu</span>
+          </router-link>
+        </li>
+        <li class="nav-item border-start my-0 pt-2" @click="push('Khoản Chi')">
+          <router-link to="/fund/payments" active-class="active" class="nav-link">
+            <span class="nav-link-text ms-1">Khoản Chi</span>
+          </router-link>
+        </li>
         <li class="nav-item" @click="push('Giải B.O.B')">
           <router-link to="/tournament" active-class="active" class="nav-link">
             <div

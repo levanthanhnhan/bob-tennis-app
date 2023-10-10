@@ -15,6 +15,10 @@ function getPageTitle() {
       return "Thành viên";
     case "fund":
       return "Quỹ hội";
+    case "receipts":
+      return "Khoản thu";
+    case "payments":
+      return "Khoản chi";
     case "tournament":
       return "Giải B.O.B";
     case "profile":

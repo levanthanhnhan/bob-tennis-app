@@ -4,6 +4,8 @@ import Main from "../components/main/Main.vue";
 import Member from "../components/member/Member.vue";
 import Fund from "../components/fund/Fund.vue";
 import FundDetail from "../components/fund/components/FundDetail.vue";
+import FundReceipts from "../components/fund/FundReceipts.vue";
+import FundPayments from "../components/fund/FundPayments.vue";
 import Tournament from "../components/tournament/Tournament.vue";
 import Profile from "../components/account/Profile.vue";
 import Login from "../components/login/Login.vue";
@@ -41,6 +43,16 @@ const routes = [
         path: "fund/detail",
         name: "funddetail",
         component: FundDetail,
+      },
+      {
+        path: "fund/receipts",
+        name: "fundreceipts",
+        component: FundReceipts,
+      },
+      {
+        path: "fund/payments",
+        name: "fundpayments",
+        component: FundPayments,
       },
       {
         path: "/tournament",
