@@ -1,5 +1,22 @@
+<script setup>
+import FundPaymentInsertModal from "./components/FundPaymentInsertModal.vue";
+import FundPaymentDeleteModal from "./components/FundPaymentDeleteModal.vue";
+
+</script>
 <template>
     <p>Danh sách các khoản chi</p>
+    <div
+      class="alert alert-success mb-4"
+      role="alert"
+      v-if="paymentResult.status != 0 && paymentResult.msg != null && paymentResult.status == 200"
+    >
+      <span class="alert-success-content">{{ paymentResult.msg }}</span>
+    </div>
+    <div class="alert alert-danger" role="alert" v-else-if="paymentResult.status != 0 && paymentResult.msg != null">
+      <span class="alert-danger-content"
+        > {{ paymentResult.msg }}</span
+      >
+    </div>
     <div class="row">
       <div class="col-md-2">
         <label for="txtYear">Năm</label>
@@ -25,7 +42,7 @@
         <label for="txtSearch">&nbsp;</label>
         <div class="form-input">
           <button class="btn btn-primary" @click="search()" style="margin-right: 10px;">TÌM KIẾM</button>
-          <button class="btn btn-success" @click="add()">THÊM MỚI</button>
+          <button class="btn btn-success" @click="openInsertModal()">THÊM MỚI</button>
         </div>
       </div>
     </div>
@@ -33,6 +50,11 @@
       <table class="table table-bordered align-items-center mb-0">
         <thead>
           <tr class="table-fund-bg">
+            <th
+              class="text-center text-uppercase text-xs font-weight-bolder"
+            >
+            STT
+            </th>
             <th
               class="text-center text-uppercase text-xs font-weight-bolder"
             >
@@ -46,13 +68,17 @@
             <th
               class="text-center text-uppercase text-xs font-weight-bolder"
             >
-              
             </th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item, index) in this.payments">
-            <td class="align-middle text-center col-3">
+            <td class="align-middle text-center col-1">
+              <span class="text-secondary text-sm">{{
+                index + 1
+              }}</span>
+            </td>
+            <td class="align-middle text-center col-6">
               <span class="text-secondary text-sm">{{
                 this.payments[index].description
               }}</span>
@@ -62,28 +88,41 @@
                 formatPrice(this.payments[index].amount)
               }}</span>
             </td>
-            <td class="align-middle text-center col-3">
-                <a
-                  href=""
-                  target="_blank"
-                  style="margin-left: 15px"
-                  ><img
+            <td class="align-middle text-center col-2">
+              <img
+                    style="cursor: pointer;"
                     src="../../assets/icons/icon_edit.png"
                     class="avatar avatar-xs me-3"
-                /></a>
-                <a
-                  href=""
-                  target="_blank"
-                  style="margin-left: 15px"
-                  ><img
+                    @click="openEditModal(item)"
+                />
+                <img
+                    style="cursor: pointer;"
                     src="../../assets/icons/icon_delete.png"
                     class="avatar avatar-xs me-3"
-                /></a>
+                    @click="openDeleteModal(item)"
+                />
             </td>
           </tr>
         </tbody>
       </table>
     </div>
+
+    <FundPaymentInsertModal
+      :show="isShowModal"
+      :payment="paymentProps"
+      @close="isShowModal = false"
+      @processPaymentResult = "processPaymentResult"
+    >
+    </FundPaymentInsertModal>
+
+    <FundPaymentDeleteModal
+      :show="isShowDeleteModal"
+      :payment="paymentProps"
+      @close="isShowDeleteModal = false"
+      @processPaymentResult = "processPaymentResult"
+    >
+    </FundPaymentDeleteModal>
+
   </template>
   
   <script>
@@ -104,10 +143,59 @@
         totalFundCount: 0,
         curQuarter: null,
         curYear: null,
-        totalAmountPayments: 0
+        totalAmountPayments: 0,
+        isShowModal: false,
+        isShowDeleteModal: false,
+        paymentProps: {
+          year: 0,
+          quarter: 0,
+          amount: 0,
+          description: null,
+          isUpdate: false,
+        },
+        paymentResult: {
+          status: 0,
+          msg: null
+        }
       };
     },
     methods: {
+      processPaymentResult(result) {
+        this.isShowModal = false
+        this.isShowDeleteModal = false
+        this.getPayments();
+        this.paymentResult = result
+      },
+      openInsertModal() {
+        this.paymentProps = {
+          year: this.curYear,
+          quarter: this.curQuarter,
+          amount: 0,
+          description: null,
+          isUpdate: false,
+        }
+        this.isShowModal = true;
+      },
+      openEditModal(payment) {
+        this.paymentProps = {
+          payment_id: payment.payment_id,
+          year: payment.year,
+          quarter: payment.quarter,
+          amount: payment.amount,
+          description: payment.description,
+          isUpdate: true,
+        }
+        this.isShowModal = true;
+      },
+      openDeleteModal(payment) {
+        this.paymentProps = {
+          payment_id: payment.payment_id,
+          year: payment.year,
+          quarter: payment.quarter,
+          isUpdate: false,
+        }
+        this.isShowDeleteModal = true;
+      },
       cbxYearChanges(event) {
         this.curYear = event.target.value;
       },
@@ -142,14 +230,18 @@
       },
       async search() {
         this.totalAmountPayments = 0;
-  
         await this.getPayments();
       }
     },
     async mounted() {
       this.curQuarter = dateTime.getQuarter;
       this.curYear = new Date().getFullYear();
-  
+      this.paymentProps = {
+          quarter: this.curQuarter,
+          year: this.curYear,
+          amount: 0,
+          description: null
+        }
       await this.search()
     }
   };

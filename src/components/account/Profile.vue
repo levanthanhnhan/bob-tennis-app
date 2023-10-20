@@ -153,16 +153,12 @@ import { VueSpinnerDots } from "vue3-spinners";
     <button class="btn btn-primary" type="submit">CẬP NHẬT</button>
   </form>
 
-  <Teleport to="body">
-    <UpdateModal
+  <UpdateModal
       :show="isShowModal"
       @close="isShowModal = false"
       @update="update"
     >
-      <template #header>
-      </template>
     </UpdateModal>
-  </Teleport>
 </template>
 
 <script>
